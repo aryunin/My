@@ -1,4 +1,15 @@
-//TODO: шапка
+/*
+=======================================
+Name: PlotFiller.cpp
+Author: Yunin Artem (Artemiiik)
+Date: 05.05.2021
+Version: 1.1
+Copiright: freeware
+Description:
+This program is designed to fill in 
+a plot file in the form of a plot tree
+=======================================
+*/
 
 #include <iostream>
 #include <fstream>
