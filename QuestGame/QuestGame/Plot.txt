@@ -1,0 +1,15 @@
+3##sit1
+2#act1#sit2
+1#act2#sit3
+0#act3#sit4
+2#act4#sit5
+1#act5#sit6
+3#act6#sit7
+0#act7#sit8
+1#act8#sit9
+0#act9#sit10
+0#act10#sit11
+0#act11#sit12
+1#act12#sit13
+0#act13#sit14
+0#act14#sit15
