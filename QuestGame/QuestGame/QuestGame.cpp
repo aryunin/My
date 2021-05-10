@@ -27,14 +27,11 @@ public:
 	// Конструктор по умолчанию
 	GameData() : root{ nullptr }
 	{ }
-	// Конструктор копирования
-	GameData(const GameData&)
-	{ } // TODO доделать
-	//~GameData();
+	// TODO все требуемые конструкторы и operator=
 
-	GameData& operator=(const GameData&);
+	void readFile(const char* const, const char);
 
-	void readFile(const char* const);
+	friend class GamePlay;
 };
 
 /// <summary>
@@ -46,19 +43,11 @@ struct GameData::Node
 	string situation{ "" }; // строка с ситуацией
 	vector <Node*> child; // массив потомков
 
-	Node() : action(""), situation("")
-	{ }
 	Node(const string& act, const string& sit) : action(act), situation(sit)
 	{ }
-	// TODO: запретить конструкторы коп и операцию =?
 };
 
-
-/// <summary>
-/// 
-/// </summary>
-/// <param name="s"></param>
-void GameData::readFile(const char* const filePath)
+void GameData::readFile(const char* const filePath, const char codeSym = '#')
 {
 	ifstream inf{ filePath };
 	if (!inf.is_open()) throw 1; // проверка на существование файла
@@ -66,16 +55,15 @@ void GameData::readFile(const char* const filePath)
 	// Чтение файла
 	using PowNodePair = pair <int, Node*>; // пара степень вершины - указатель на вершину
 	vector <PowNodePair> vertices; // массив вершин с их степенями
-	const char CODE_SYMBOL = '#'; // кодовый символ-разделитель
 	string istr; // строка из файла
 	while (getline(inf, istr))
 	{
 		// Наождение 2-х кодовых символов (1-между степенью и действием, 2-между действием и ситуацией)
-		unsigned int firstCSPos{ istr.find(CODE_SYMBOL) };
+		unsigned int firstCSPos{ istr.find(codeSym) };
 		if (firstCSPos == string::npos) throw 2;
-		unsigned int secondCSPos{ istr.find(CODE_SYMBOL, firstCSPos + 1) };
+		unsigned int secondCSPos{ istr.find(codeSym, firstCSPos + 1) };
 		if (secondCSPos == string::npos) throw 2;
-		unsigned int excessCSPos{ istr.find(CODE_SYMBOL, secondCSPos + 1) };
+		unsigned int excessCSPos{ istr.find(codeSym, secondCSPos + 1) };
 		if (excessCSPos != string::npos) throw 2;
 
 		// Преобразование степени вершины в int
@@ -121,8 +109,44 @@ void GameData::readFile(const char* const filePath)
 
 class GamePlay
 {
+private:
+	const GameData& data;
+public:
+	GamePlay(const GameData& _data) : data(_data)
+	{ }
+	// TODO все требуемые конструкторы и operator=
 
+	void play() const;
 };
+
+void GamePlay::play() const
+{
+	GameData::Node* currentNode = data.root;
+	while ((currentNode->child).size() != 0)
+	{
+		cout << "~" + currentNode->situation + "\n\n~Варианты ответа:\n";
+
+		vector<GameData::Node*>::const_iterator itChild{ (currentNode->child).cbegin() };
+		for (int i{ 0 }; itChild != (currentNode->child).cend(); i++)
+		{
+			cout << i << ") " + (*itChild)->action + '\n';
+			itChild++;
+		}
+
+		cout << "\n~Введите выбранный вариант ответа: ";
+		int response{};
+		while (!(cin >> response) || cin.peek() != '\n' || response < 0 || (unsigned)response >= (currentNode->child).size())
+		{
+			cin.clear();
+			while (cin.get() != '\n');
+			cout << "~Такого варианта не существует. Попробуйте еще раз: ";
+		}
+		currentNode = (currentNode->child)[response];
+
+		cout << '\n';
+	}
+	cout << "~" + currentNode->situation + "\nGAMEOVER СУКА ТЫ ВСОСАЛ\n\n";
+}
 
 int main()
 {
@@ -130,13 +154,9 @@ int main()
 	SetConsoleOutputCP(1251);
 
 	GameData data;
-	try
-	{
-		data.readFile("Plot.txt");
-	}
-	catch (int k)
-	{
-		cerr << "ERROR: code " << k << "!\n";
-	}
+	data.readFile("Plot.txt");
+	GamePlay game(data);
+	game.play();
+	
 	system("pause");
 }
