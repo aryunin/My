@@ -1,8 +1,8 @@
 /*=======================================
 Name: QuestGame.cpp
 Author: Yunin Artem (Artemiiik)
-Date: 08.05.2021
-Version: 
+Date: 09.06.2021
+Version: 1.0
 Copiright: freeware
 Description:
 A simple console game based 
@@ -15,148 +15,117 @@ on multiple-choice questions
 #include <Windows.h>
 using namespace std;
 
+//================================================================================================
 
-template<class T>
+/// <summary>
+/// Один уровень представляет собой действие,
+/// приводящее к ситуации, и саму ситуацию непосредственно
+/// </summary>
+struct Level
+{
+	string action; // действие
+	string situation; // ситуация
+
+	// Конструктор с двумя строками
+	Level(const string& _action, const string& _situation) : action(_action), situation(_situation)
+	{ }
+};
+
+/// <summary>
+/// Одна вершина представляет k-арное дерево с данными в виде уровня Level
+/// </summary>
 struct Node
 {
-	T data; // данные
+	Level data; // данные
 	vector <Node*> child; // потомки
 
-	// Конструктор с аргументом T
-	explicit Node(T _data) : data{ _data }
+	// Конструктор с аргументом Level
+	explicit Node(const Level& _Level) : data{ _Level }
 	{ }
 	// Конструктор копирования
-	Node(const Node& _node) : data{ _node.data }
+	Node(const Node& _Node) : data{ _Node.data }
 	{
-		typename vector<Node*>::const_iterator it;
-		for (it = _node.child.cbegin(); it != _node.child.cend(); it++)
-			child.push_back(new Node{ **it });
+		vector<Node*>::const_iterator it;
+		for (it = _Node.child.cbegin(); it != _Node.child.cend(); it++)
+			child.push_back(new Node{ **it }); // вектор потомков заполняется копиями потомков копируемой вершины
 	}
 	// Оператор присваивания
-	Node& operator=(const Node& _node)
+	Node& operator=(const Node& _Node)
 	{
-		data = _node.data;
-		typename vector<Node*>::const_iterator it;
+		data = _Node.data;
+		vector<Node*>::const_iterator it;
+
 		// Сначала очищаем вектор
-		for (it = child.begin(); it != child.end(); it++)
+		for (it = child.cbegin(); it != child.cend(); it++)
 			delete* it; // каждый элемент представлен в виде динамической памяти, сначала очищаем память
 		child.clear(); // затем удаляем все указатели
+
 		// Затем заполняем его копиями детей
-		for (it = _node.child.сbegin(); it != _node.child.сend(); it++)
+		for (it = _Node.child.cbegin(); it != _Node.child.cend(); it++)
 			child.push_back(new Node{ **it });
+
+		// Возвращаем текующую структуру
 		return *this;
 	}
 	// Деструктор
 	~Node()
 	{
-		typename vector<Node*>::const_iterator it;
+		vector<Node*>::const_iterator it;
 		for (it = child.cbegin(); it != child.cend(); it++)
 			delete* it;
+		child.clear();
 	}
 };
 
-template<class T>
-class tGameData
-{
-private:
-	Node<T>* root; // корневая вершина
-public:
-	// Конструктор по умолчанию
-	tGameData() : root{ nullptr }
-	{ }
-	// Конструктор копирования TODO: test
-	tGameData(const tGameData<T>& _data)
-	{
-		(_data.root == nullptr) ? root = nullptr : root = new Node{ *(_data.root) };
-	}
-	// Оператор присваивания TODO: test
-	tGameData& operator=(const tGameData<T>& _data)
-	{
-		delete root;
-		(_data.root == nullptr) ? root = nullptr : root = new Node{ *(_data.root) };
-		return *this;
-	}
-	// Деструктор TODO: test
-	~tGameData()
-	{
-		delete root;
-	}
-
-
-	T getNodeData() const
-	{
-		return root->data; // TODO: nullptr situation?
-	}
-
-	unsgined int getNodeChildCount()
-	{
-		return (root->child).size();
-	}
-
-	void gotoNextNode(const int childNum)
-	{
-		if (childNum >= (root->child).size() || childNum < 0)
-			throw 1; // TODO: errors codes
-		root = (root->child)[childNum];
-	}
-};
-
-
-
-
-
-
-
-
-
-
-
-// TODO: comment
-using level = pair<string, string>;
+//================================================================================================
 
 /// <summary>
-/// 
+/// Класс, отвечающий за считывание сюжетных данных из файла
+/// и последующее хранение их
 /// </summary>
 class GameData
 {
 private:
-	Node<level>* root{ nullptr }; // корень дерева
+	Node* root{ nullptr }; // корень дерева
 public:
 	// Конструктор по умолчанию
 	GameData() : root{ nullptr }
 	{ }
-	// Конструктор копирования TODO: test
-	GameData(const GameData& _data) 
+	// Конструктор копирования 
+	GameData(const GameData& _GameData) 
 	{ 
-		(_data.root == nullptr) ? root = nullptr : root = new Node<level>{ *(_data.root) };
+		(_GameData.root == nullptr) ? root = nullptr : root = new Node{ *(_GameData.root) };
 	}
-	// Оператор присваивания TODO: test
-	GameData& operator=(const GameData& _data)
+	// Оператор присваивания 
+	GameData& operator=(const GameData& _GameData)
 	{
 		delete root;
-		(_data.root == nullptr) ? root = nullptr : root = new Node<level>{ *(_data.root) };
+		(_GameData.root == nullptr) ? root = nullptr : root = new Node{ *(_GameData.root) };
 		return *this;
 	}
-	// Деструктор TODO: test
+	// Деструктор 
 	~GameData()
 	{
 		delete root;
 	}
-
-	/// TODO: comment
+	
 	void readFile(const char* const, const char);
 
 	friend class GamePlay;
 };
 
-/// TODO: comment
+/// <summary>
+/// Чтение файла
+/// </summary>
+/// <param name="filePath">Путь к файлу</param>
+/// <param name="codeSym">Кодовый символ</param>
 void GameData::readFile(const char* const filePath, const char codeSym = '#')
 {
 	ifstream inf{ filePath };
 	if (!inf.is_open()) throw 1; // проверка на существование файла
 	
 	// Чтение файла
-	using PowNodePair = pair <int, Node<level>*>; // пара степень вершины - указатель на вершину
+	using PowNodePair = pair <int, Node*>; // пара степень вершины - указатель на вершину
 	vector <PowNodePair> vertices; // массив вершин с их степенями
 	string istr; // строка из файла
 	while (getline(inf, istr))
@@ -185,10 +154,10 @@ void GameData::readFile(const char* const filePath, const char codeSym = '#')
 		string action{ istr.substr(firstCSPos + 1, secondCSPos - firstCSPos - 1) };
 		string situation{ istr.substr(secondCSPos + 1, istr.length() - secondCSPos - 1) };
 
-		level lvl{ action, situation };
+		Level lvl{ action, situation };
 		
 		// Запись данных в вектор
-		vertices.push_back(PowNodePair{ vertPow, new Node<level>{lvl} });
+		vertices.push_back(PowNodePair{ vertPow, new Node{lvl} });
 	}
 	inf.close(); // закрытие файла
 
@@ -199,19 +168,24 @@ void GameData::readFile(const char* const filePath, const char codeSym = '#')
 	while(itPrnt != vertices.cend())
 	{
 		int prntPow = (*itPrnt).first; // степень родительской вершины
-		Node<level>* prnt = (*itPrnt).second; // указаиель на род. вершину
+		Node* prnt = (*itPrnt).second; // указаиель на род. вершину
 		// Установление связи между родительской вершиной и prntPow дочерними вершинами
 		for (int i{ 0 }; i < prntPow; ++i, ++itChild)
 		{
 			(itChild == vertices.cend()) ? throw 2 : 0; // если неверно указана степень вершины, 
 														// конец вектора может быть достигнут раньше - неверное заполнение файла
-			Node<level>* child = (*itChild).second; 
+			Node* child = (*itChild).second; 
 			prnt->child.push_back(child);
 		}
 		++itPrnt;
 	}
 }
 
+//================================================================================================
+
+/// <summary>
+/// Класс, отвечающий за логику игры
+/// </summary>
 class GamePlay
 {
 private:
@@ -220,41 +194,27 @@ public:
 	// Конструктор c одним аргументом. Конструктор по умолчанию не предусмотрен концепцией
 	explicit GamePlay(const GameData& _data) : data(_data)
 	{ }
-	
 	// Конструктор копирования
-	GamePlay(const GamePlay& _gamePlay) : data(_gamePlay.data)
+	GamePlay(const GamePlay& _GamePlay) : data(_GamePlay.data)
 	{ }
+	// Оператор присваивания
+	GamePlay& operator=(const GamePlay& _GamePlay) 
+	{
+		data = _GamePlay.data;
+	}
 
 	void play() const;
 };
 
-void hyphenate(string& str, const int buffSize)
-{	
-	unsigned int i{ str.length()};
-	while(i > 0)
-	{
-		if (str[i-1] == ' ')
-		{
-			str[i-1] = '\n';
-			break;
-		}
-		--i;
-	}
-}
-
+/// <summary>
+/// Функция игры
+/// </summary>
 void GamePlay::play() const
 {
-	// Получаем размер консольного окна в символах
-	HANDLE hWndCon{ GetStdHandle(STD_OUTPUT_HANDLE) };
-	CONSOLE_SCREEN_BUFFER_INFO csbiData;
-	GetConsoleScreenBufferInfo(hWndCon, &csbiData);
-	int width{ csbiData.dwSize.X };
-
-	Node<level>* currentNode = data.root; // получаем корневую вершину
+	Node* currentNode = data.root; // получаем корневую вершину
 	while (currentNode) // пока есть вершины
 	{
-		string situation{ (currentNode->data).second };
-		hyphenate(situation, width-1);
+		string situation{ (currentNode->data).situation };
 
 		// Выводим ситуацию
 		cout << "~" + situation + '\n';
@@ -262,18 +222,16 @@ void GamePlay::play() const
 		// Если нет вариантов ответа, конец игры
 		if ((currentNode->child).size() == 0)
 		{
-			cout << "\n~Конец игры\n";
-			// TODO: gameover()
+			cout << "\n~Конец игры\n\n";
 			break;
 		}
 
 		// Если варианты ответа есть, выводим их на выбор
 		cout << "\n~Варианты ответа:\n";
-		vector<Node<level>*>::const_iterator itChild{ (currentNode->child).cbegin() };
+		vector<Node*>::const_iterator itChild{ (currentNode->child).cbegin() };
 		for (int i{ 0 }; itChild != (currentNode->child).cend(); i++)
 		{
-			string action{ ((*itChild)->data).first };
-			hyphenate(action, width - 2);
+			string action{ ((*itChild)->data).action };
 
 			cout << i << ") " + action + '\n';
 			itChild++;
@@ -297,16 +255,37 @@ void GamePlay::play() const
 	}
 }
 
+//================================================================================================
+
 int main()
 {
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
-	GameData data;
-	data.readFile("Plot.txt");
+	// Чтение сюжетных данных
+	GameData data; // сюжетные данные
+	try 
+	{
+		data.readFile("Plot.txt"); // пробуем прочитать файл
+	}
+	catch (int code)
+	{
+		switch (code)
+		{
+		case 1:
+			cerr << "ОШИБКА: сюжетный файл не найден!\n";
+			return 1;
+			break;
+		case 2:
+			cerr << "ОШИБКА: сюжетный файл заполнен неверно!\n";
+			return 2;
+			break;
+		}
+	}
 
-	GamePlay game(data);
-	game.play();
+	// Сама игра
+	GamePlay game(data); // инициализируем игру нашим GameData
+	game.play(); // начинаем игру
 	
 	system("pause");
 }

@@ -2,8 +2,8 @@
 =======================================
 Name: PlotFiller.cpp
 Author: Yunin Artem (Artemiiik)
-Date: 05.05.2021
-Version: 1.2
+Date: 09.06.2021
+Version: 1.0
 Copiright: freeware
 Description:
 This program is designed to fill in 
@@ -49,7 +49,7 @@ int main()
 		<< "к которой ведет действие. Заполнение обязательно должно\n"
 		<< "начинаться с корневой вершины (действие можно не вводить)\n"
 		<< "и быть упорядочено (сверху вниз, слева направо).\n"
-		<< "Специальные символы: # и * (нельзя использовать)\n";
+		<< "Специальные символы: # (нельзя использовать)\n";
 	int verticesCount{ 1 }; // количество вершин к заполнению (считается из суммы степеней вершин)
 	for(int i = 1; i <= verticesCount; i++)
 	{
@@ -69,7 +69,7 @@ int main()
 		cout << "~Введите действие, приводящее к ситуации:\n";
 		string action{};
 		getline(cin, action);
-		while (action.find('#') != string::npos || action.find('*') != string::npos)
+		while (action.find('#') != string::npos)
 		{
 			cout << "~Строка содержит запрещенные символы. Попробуйте еще:\n";
 			getline(cin, action);
@@ -79,16 +79,16 @@ int main()
 		cout << "~Введите ситуацию:\n";
 		string situation{};
 		getline(cin, situation);
-		while (situation.find('#') != string::npos || situation.find('*') != string::npos)
+		while (situation.find('#') != string::npos)
 		{
 			cout << "~Строка содержит запрещенные символы. Попробуйте еще:\n";
 			getline(cin, situation);
 		}
 
 		// Заполнение данных вершины в файле
-		outf << '#' << verticePow << '#' // степень вершины
+		outf << verticePow << '#' // степень вершины
 			<< action // строка с действием
-			<< '*' // разделитель строки с действием и строки с ситуацией
+			<< '#' // разделитель строки с действием и строки с ситуацией
 			<< situation << '\n' // строка с ситуацией
 			<< flush; // очистка буфера
 	}
