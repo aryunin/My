@@ -1,8 +1,8 @@
 /*=======================================
 Name: QuestGame.cpp
 Author: Yunin Artem (Artemiiik)
-Date: 09.06.2021
-Version: 1.0
+Date: 24.06.2021
+Version: 
 Copiright: freeware
 Description:
 A simple console game based 
@@ -131,11 +131,11 @@ void GameData::readFile(const char* const filePath, const char codeSym = '#')
 	while (getline(inf, istr))
 	{
 		// Наождение 2-х кодовых символов (1-между степенью и действием, 2-между действием и ситуацией)
-		unsigned int firstCSPos{ istr.find(codeSym) };
+		size_t firstCSPos{ istr.find(codeSym) };
 		if (firstCSPos == string::npos) throw 2;
-		unsigned int secondCSPos{ istr.find(codeSym, firstCSPos + 1) };
+		size_t secondCSPos{ istr.find(codeSym, firstCSPos + 1) };
 		if (secondCSPos == string::npos) throw 2;
-		unsigned int excessCSPos{ istr.find(codeSym, secondCSPos + 1) };
+		size_t excessCSPos{ istr.find(codeSym, secondCSPos + 1) };
 		if (excessCSPos != string::npos) throw 2;
 
 		// Преобразование степени вершины в int
@@ -222,7 +222,7 @@ void GamePlay::play() const
 		// Если нет вариантов ответа, конец игры
 		if ((currentNode->child).size() == 0)
 		{
-			cout << "\n~Конец игры\n\n";
+			cout << "\n~КОНЕЦ\n\n";
 			break;
 		}
 
@@ -275,10 +275,12 @@ int main()
 		case 1:
 			cerr << "ОШИБКА: сюжетный файл не найден!\n";
 			return 1;
+			system("Pause");
 			break;
 		case 2:
 			cerr << "ОШИБКА: сюжетный файл заполнен неверно!\n";
 			return 2;
+			system("Pause");
 			break;
 		}
 	}
