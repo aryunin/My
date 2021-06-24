@@ -74,5 +74,9 @@ int main()
 	std::cout << "~Введите количество символов пароля: ";
 	unsigned int count{ 16 };
 	std::cin >> count;
-	std::cout << "~Сгенерированный пароль: " << generatePass(count) << std::endl;
+	char* password{ generatePass(count) };
+	std::cout << "~Сгенерированный пароль: " << password << std::endl;
+	delete[] password;
+	system("pause");
+	return 0;
 }

@@ -2,7 +2,7 @@
 Name: Exc3.cpp
 Author: Yunin Artem (Artemiiik)
 Date: 23.06.2021
-Version: 
+Version:
 Copiright: freeware
 Description:
 A simple letter counter
@@ -17,7 +17,7 @@ int toLower(unsigned char ch) // tolower() для СP-1251 с поддержко
 {
 	if (ch >= 65 && ch <= 90 || ch >= 192 && ch <= 223)
 		ch += 32;
-	else if (ch == 168) 
+	else if (ch == 168)
 		ch = 184;
 	return ch;
 }
@@ -31,7 +31,7 @@ charUIntMap* func(const std::string& str)
 	for (sIt = str.cbegin(); sIt != str.cend(); sIt++)
 	{
 		unsigned char ch{ (unsigned char)toLower(*sIt) };
-		if (ch >= 97 && ch <= 122 || 
+		if (ch >= 97 && ch <= 122 ||
 			ch >= 224 && ch <= 255 || ch == 184)
 			((*mp)[ch])++; // начальные значения unsigned int-элементов map по умолчанию нули
 	}
@@ -50,10 +50,14 @@ int main()
 	std::getline(std::cin, str);
 
 	// Решение 
-	charUIntMap* mp{ func(str) }; 
+	charUIntMap* mp{ func(str) };
 
 	// Вывод
 	charUIntMap::const_iterator mIt;
 	for (mIt = mp->cbegin(); mIt != mp->cend(); mIt++)
 		std::cout << '\'' << mIt->first << "\' - " << mIt->second << "ps\n";
+
+	delete mp;
+	system("pause");
+	return 0;
 }

@@ -51,8 +51,12 @@ int main()
 	insertSort(arr, count, direct);
 
 	cout << "\n~Отсортированная последовательность:\n";
-	for (int i = 0; i < count; i++)
+	for (int i{ 0 }; i < count; i++)
 		cout << arr[i] << ' ';
 
 	cout << endl;
+
+	delete[] arr;
+	system("pause");
+	return 0;
 }
