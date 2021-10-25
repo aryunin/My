@@ -1,3 +1,0 @@
-"D:\Programming\CLion 2021.2\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\CLion_FP.dir/objects.a
-D:\Programming\MinGW\mingw64\bin\ar.exe cr CMakeFiles\CLion_FP.dir/objects.a @CMakeFiles\CLion_FP.dir\objects1.rsp
-D:\Programming\MinGW\mingw64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\CLion_FP.dir/objects.a -Wl,--no-whole-archive -o CLion_FP.exe -Wl,--out-implib,libCLion_FP.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\CLion_FP.dir\linklibs.rsp
