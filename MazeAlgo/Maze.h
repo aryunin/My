@@ -5,11 +5,18 @@
 
 struct Coord {
     int x, y;
-    bool operator>(const Coord& c2){
-        if(c2.y > y) {
-            if(c2.x > x) return true;
+
+    // Компораторы для заполнения графа необходимы (граф = map)
+    bool operator<(const Coord& c2) const {
+        if(y < c2.y) return true;
+        else if(y == c2.y) {
+            if(x < c2.x) return true;
             else return false;
         }
+        else return false;
+    }
+    bool operator==(const Coord& c2) const {
+        if(c2.x == x && c2.y == y) return true;
         else return false;
     }
 };
@@ -17,19 +24,19 @@ struct Coord {
 class Maze {
 private:
     std::vector<std::string> mazeArr;
-    Coord startPoint, endPoint, treasurePos;
-    std::vector<Coord> routeToTreasure;
-    std::vector<Coord> routeToExit;
     Graph<Coord> graph;
+    Coord startPoint, endPoint, treasurePoint;
+    char treasureSymbol;
 
     void readFile(const std::string&);
-    void findInPoint();
-    void findOutPoint();
-    void recBuildGraph(const Coord&);
+    void findStartPoint();
+    void findEndPoint();
 public:
     Maze(const std::string&);
-    void setTreasureLocation(const Coord&);
+    void setTreasurePoint(const Coord&, const char symbol = '*');
     void buildGraph();
-    void findRoute_stot();
-    void findRoute_ttoe();
+    void findRoute_stot(std::vector<Coord>&);
+    void findRoute_ttoe(std::vector<Coord>&);
+    void printRoute(std::vector<Coord>&, const char);
+    void printToFile(const std::string&) const;
 };

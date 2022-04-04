@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+D:/Programming/GitRepos/My/MazeAlgo/Graph.h
+map
+-
+vector
+-
+algorithm
+-
+queue
+-
+
+D:/Programming/GitRepos/My/MazeAlgo/Maze.cpp
+Maze.h
+D:/Programming/GitRepos/My/MazeAlgo/Maze.h
+string
+-
+fstream
+-
+algorithm
+-
+
+D:/Programming/GitRepos/My/MazeAlgo/Maze.h
+string
+-
+vector
+-
+Graph.h
+D:/Programming/GitRepos/My/MazeAlgo/Graph.h
+
+D:/Programming/GitRepos/My/MazeAlgo/main.cpp
+iostream
+-
+Maze.h
+D:/Programming/GitRepos/My/MazeAlgo/Maze.h
+
