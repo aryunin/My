@@ -1,7 +1,6 @@
 #include "Maze.h"
 #include <string>
 #include <fstream>
-#include <algorithm>
 
 void Maze::findStartPoint() {
     startPoint.y = 0;
@@ -13,7 +12,7 @@ void Maze::findEndPoint() {
     endPoint.x = (mazeArr[mazeArr.size() - 1]).find(' ');
 }
 
-Maze::Maze(const std::string& fileName) : treasurePoint{-1, -1}, treasureSymbol{'*'} {
+Maze::Maze(const std::string& fileName) : treasurePoint{-1, -1} {
     readFile(fileName);
     findStartPoint();
     findEndPoint();
@@ -21,8 +20,7 @@ Maze::Maze(const std::string& fileName) : treasurePoint{-1, -1}, treasureSymbol{
 
 void Maze::setTreasurePoint(const Coord& coords, const char symbol){
     treasurePoint = coords; // TODO exception (invalid treasure coords)
-    treasureSymbol = symbol;
-    mazeArr[treasurePoint.y][treasurePoint.x] = treasureSymbol;
+    mazeArr[treasurePoint.y][treasurePoint.x] = symbol;
 }
 
 void Maze::readFile(const std::string& fileName) {
@@ -36,9 +34,10 @@ void Maze::readFile(const std::string& fileName) {
 }
 
 void Maze::buildGraph() {
-    for(int i {1}; i < mazeArr.size()-1; i++) {
-        for(int j{1}; j < mazeArr[i].length() - 1; j++) {
+    for(int i {1}; i < mazeArr.size()-1; i++) {            //для всех кроме первой и последней строк
+        for(int j{1}; j < mazeArr[i].length() - 1; j++) {  //для .. столбцов
             Coord current {j, i};
+            // в mazeArr первый индекс это строчка
             if(mazeArr[i][j] != '#') {
                 if(mazeArr[i][j-1] != '#') graph.addEdge(current, Coord{j-1,i});
                 if(mazeArr[i][j+1] != '#') graph.addEdge(current, Coord{j+1,i});
@@ -47,13 +46,13 @@ void Maze::buildGraph() {
             }
         }
     }
-    graph.addEdge(startPoint, Coord{startPoint.x, startPoint.y+1});
-    graph.addEdge(Coord{endPoint.x, endPoint.y-1}, endPoint);
+    graph.addEdge(startPoint, Coord{startPoint.x, startPoint.y+1});  //так как мы не проверяем первую и последнюю сторки то
+    graph.addEdge(Coord{endPoint.x, endPoint.y-1}, endPoint);        //связываем точку старта с точкой ниже, точку выше выхода с точкой выхода
 }
 
 void Maze::findRoute_stot(std::vector<Coord>& route) {
     graph.DFS(startPoint, treasurePoint, route);
-    route.erase(route.end() - 1);
+    if(!route.empty()) route.erase(route.end() - 1);  // получаем последнюю вершину и удаляем звездочку, если вектор не пустой
 }
 
 void Maze::findRoute_ttoe(std::vector<Coord>& route) {

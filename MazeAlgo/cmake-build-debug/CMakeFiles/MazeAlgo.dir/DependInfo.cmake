@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "D:/Programming/GitRepos/My/MazeAlgo/Maze.cpp" "D:/Programming/GitRepos/My/MazeAlgo/cmake-build-debug/CMakeFiles/MazeAlgo.dir/Maze.cpp.obj"
-  "D:/Programming/GitRepos/My/MazeAlgo/main.cpp" "D:/Programming/GitRepos/My/MazeAlgo/cmake-build-debug/CMakeFiles/MazeAlgo.dir/main.cpp.obj"
+  "E:/programming/GitHub/My/MazeAlgo/Maze.cpp" "E:/programming/GitHub/My/MazeAlgo/cmake-build-debug/CMakeFiles/MazeAlgo.dir/Maze.cpp.obj"
+  "E:/programming/GitHub/My/MazeAlgo/main.cpp" "E:/programming/GitHub/My/MazeAlgo/cmake-build-debug/CMakeFiles/MazeAlgo.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

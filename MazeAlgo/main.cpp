@@ -13,10 +13,10 @@ int main() {
 
     Coord treasurePoint {-1, -1};
     enterTreasurePoint(treasurePoint);
-    maze.setTreasurePoint(treasurePoint);
+    maze.setTreasurePoint(treasurePoint, '&');
 
-    std::vector<Coord> stot;
-    std::vector<Coord> ttoe;
+    std::vector<Coord> stot{};
+    std::vector<Coord> ttoe{};
     maze.findRoute_stot(stot);
     maze.printRoute(stot, '.');
     maze.findRoute_ttoe(ttoe);
@@ -35,7 +35,7 @@ void enterTreasurePoint(Coord& treasurePoint) {
     std::cin >> treasurePoint.x;
     std::cin.clear();
     std::cin.ignore();
-    std::cout << "Input posY: ";
+    std::cout << "~Input posY: ";
     std::cin >> treasurePoint.y;
     std::cin.clear();
     std::cin.ignore();

@@ -24,9 +24,8 @@ struct Coord {
 class Maze {
 private:
     std::vector<std::string> mazeArr;
-    Graph<Coord> graph;
+    Graph<Coord> graph;         //разворачиваем шаблон графа для Coord
     Coord startPoint, endPoint, treasurePoint;
-    char treasureSymbol;
 
     void readFile(const std::string&);
     void findStartPoint();
@@ -34,9 +33,10 @@ private:
 public:
     Maze(const std::string&);
     void setTreasurePoint(const Coord&, const char symbol = '*');
-    void buildGraph();
-    void findRoute_stot(std::vector<Coord>&);
-    void findRoute_ttoe(std::vector<Coord>&);
+    void buildGraph();                                   //создание графа
+    void findRoute_stot(std::vector<Coord>&);           //от старта до клада
+    void findRoute_ttoe(std::vector<Coord>&);           //от клада до выхода
     void printRoute(std::vector<Coord>&, const char);
     void printToFile(const std::string&) const;
 };
+
