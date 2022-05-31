@@ -1,3 +1,0 @@
-"E:\programming\CLion 2021.2\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\MazeAlgo.dir/objects.a
-E:\programming\mingw-w64\mingw64\bin\ar.exe cr CMakeFiles\MazeAlgo.dir/objects.a @CMakeFiles\MazeAlgo.dir\objects1.rsp
-E:\programming\mingw-w64\mingw64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\MazeAlgo.dir/objects.a -Wl,--no-whole-archive -o MazeAlgo.exe -Wl,--out-implib,libMazeAlgo.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\MazeAlgo.dir\linklibs.rsp
